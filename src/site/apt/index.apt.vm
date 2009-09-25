@@ -7,7 +7,7 @@ ${project.name}
   This project is an implementation of Wagon provider for Subversion repository access. It allows to host the Maven
   artifact repository inside Subversion repository.
 
-  The {{{http://svnkit.com/}SVNKit}} library is used for all Subversion-related operations.
+  The {{{http://svnkit.com}SVNKit}} library is used for all Subversion-related operations.
 
 * Usage
 
@@ -50,9 +50,9 @@ ${project.name}
   file properties that will be automatically set on newly added files.
 
   Files ending with <<<".asc.md5">>> and <<<".asc.sha1">>> will be silently discarded on upload.
-  Such files appear when the {{{http://maven.apache.org/plugins/maven-gpg-plugin/}maven-gpg-plugin}} is used to sign
-  the project artifacts and then the {{{http://maven.apache.org/plugins/maven-deploy-plugin/}maven-deploy-plugin}}
-  (either directly or through the {{{http://maven.apache.org/plugins/maven-release-plugin/}maven-release-plugin}})
+  Such files appear when the {{{http://maven.apache.org/plugins/maven-gpg-plugin}maven-gpg-plugin}} is used to sign
+  the project artifacts and then the {{{http://maven.apache.org/plugins/maven-deploy-plugin}maven-deploy-plugin}}
+  (either directly or through the {{{http://maven.apache.org/plugins/maven-release-plugin}maven-release-plugin}})
   is used to deploy them to the repository.
 
 * Similar wagons
