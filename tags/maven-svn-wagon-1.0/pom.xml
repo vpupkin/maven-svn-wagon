@@ -148,7 +148,7 @@
             <extension>
                 <groupId>com.google.code.maven-svn-wagon</groupId>
                 <artifactId>maven-svn-wagon</artifactId>
-                <version>1.0-bootstrap</version>
+                <version>1.0</version>
             </extension>
         </extensions>
     </build>
