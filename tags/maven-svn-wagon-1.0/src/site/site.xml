@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <publishDate position="right"/>
+    <version position="right"/>
+
+    <body>
+        <breadcrumbs>
+            <item name="Maven" href="http://maven.apache.org/"/>
+            <item name="Wagon" href="http://maven.apache.org/wagon/"/>
+        </breadcrumbs>
+
+        <menu name="Overview">
+            <item name="Introduction" href="index.html"/>
+        </menu>
+
+        <menu ref="reports"/>
+    </body>
+</project>
