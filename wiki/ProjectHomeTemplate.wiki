@@ -1,12 +1,12 @@
 #summary Versioned template for the project home page.
 
-* Maven SVN Wagon
+= Maven SVN Wagon =
 
 This project is an implementation of Wagon provider for Subversion repository access. It allows to host the Maven artifact repository inside Subversion repository.
 
 The [http://svnkit.com SVNKit] library is used for all Subversion-related operations.
 
-* Usage
+== Usage ==
 
 The wagon should be added to your POM as extension. The additional repository is required to download the wagon artifacts from the project repository hosted on the Google Code.
 
@@ -42,14 +42,14 @@ It will allow to use the following kinds of URLs in the `distributionManagement`
 
 The `"svn:"` prefix activates the wagon and the remaining part of the URL contains the proper Subversion repository URL.
 
-* Features
+== Features ==
 
 The wagon uses the default Subversion runtime configuration area for authentication and for evaluation of file properties that will be automatically set on newly added files.
 
 Files ending with `".asc.md5"` and `".asc.sha1"` will be silently discarded on upload.
 Such files appear when the [http://maven.apache.org/plugins/maven-gpg-plugin maven-gpg-plugin] is used to sign the project artifacts and then the [http://maven.apache.org/plugins/maven-deploy-plugin maven-deploy-plugin] (either directly or through the [http://maven.apache.org/plugins/maven-release-plugin maven-release-plugin]) is used to deploy them to the repository.
 
-* Similar wagons
+== Similar wagons ==
 
 The following wagons can also be used to work with the Subversion-based Maven repositories:
 
