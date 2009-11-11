@@ -56,8 +56,8 @@
             
   
     
-             Last Published: 2009-09-25
-              &nbsp;| Version: 1.0
+             Last Published: 2009-11-11
+              &nbsp;| Version: 1.1
             </div>
       <div class="clear">
         <hr/>
@@ -120,24 +120,17 @@
       <div id="contentBox">
         <div class="section"><h2>Maven SVN Wagon</h2>
 <p>This project is an implementation of Wagon provider for Subversion repository access. It allows to host the Maven artifact repository inside Subversion repository.</p>
-<p>The <a class="externalLink" href="http://svnkit.com">SVNKit</a> library is used for all Subversion-related operations.</p>
+<p>The <a href="http://svnkit.com" class="externalLink">SVNKit</a> library is used for all Subversion-related operations.</p>
 <div class="section"><h3>Usage</h3>
-<p>The wagon should be added to your POM as extension. The additional repository is required to download the wagon artifacts from the project repository hosted on the Google Code.</p>
+<p>The wagon should be added to your POM as extension.</p>
 <div class="source"><pre>&lt;project&gt;
-    ...
-    &lt;repositories&gt;
-        &lt;repository&gt;
-            &lt;id&gt;maven-svn-wagon.googlecode.com/svn/m2/release&lt;/id&gt;
-            &lt;url&gt;http://maven-svn-wagon.googlecode.com/svn/m2/release&lt;/url&gt;
-        &lt;/repository&gt;
-    &lt;/repositories&gt;
     ...
     &lt;build&gt;
         &lt;extensions&gt;
             &lt;extension&gt;
                 &lt;groupId&gt;com.google.code.maven-svn-wagon&lt;/groupId&gt;
                 &lt;artifactId&gt;maven-svn-wagon&lt;/artifactId&gt;
-                &lt;version&gt;1.0&lt;/version&gt;
+                &lt;version&gt;1.1&lt;/version&gt;
             &lt;/extension&gt;
         &lt;/extensions&gt;
     &lt;/build&gt;
@@ -154,12 +147,12 @@
 </div>
 <div class="section"><h3>Features</h3>
 <p>The wagon uses the default Subversion runtime configuration area for authentication and for evaluation of file properties that will be automatically set on newly added files.</p>
-<p>Files ending with <tt>&quot;.asc.md5&quot;</tt> and <tt>&quot;.asc.sha1&quot;</tt> will be silently discarded on upload. Such files appear when the <a class="externalLink" href="http://maven.apache.org/plugins/maven-gpg-plugin">maven-gpg-plugin</a> is used to sign the project artifacts and then the <a class="externalLink" href="http://maven.apache.org/plugins/maven-deploy-plugin">maven-deploy-plugin</a> (either directly or through the <a class="externalLink" href="http://maven.apache.org/plugins/maven-release-plugin">maven-release-plugin</a>) is used to deploy them to the repository.</p>
+<p>Files ending with <tt>&quot;.asc.md5&quot;</tt> and <tt>&quot;.asc.sha1&quot;</tt> will be silently discarded on upload. Such files appear when the <a href="http://maven.apache.org/plugins/maven-gpg-plugin" class="externalLink">maven-gpg-plugin</a> is used to sign the project artifacts and then the <a href="http://maven.apache.org/plugins/maven-deploy-plugin" class="externalLink">maven-deploy-plugin</a> (either directly or through the <a href="http://maven.apache.org/plugins/maven-release-plugin" class="externalLink">maven-release-plugin</a>) is used to deploy them to the repository.</p>
 </div>
 <div class="section"><h3>Similar wagons</h3>
 <p>The following wagons can also be used to work with the Subversion-based Maven repositories:</p>
-<ul><li><a class="externalLink" href="http://maven.apache.org/wagon/wagon-providers/wagon-scm/index.html"><tt>org.apache.maven.wagon:wagon-scm</tt></a></li>
-<li><a class="externalLink" href="https://wagon-svn.dev.java.net"><tt>org.jvnet.wagon-svn:wagon-svn</tt></a></li>
+<ul><li><a href="http://maven.apache.org/wagon/wagon-providers/wagon-scm/index.html" class="externalLink"><tt>org.apache.maven.wagon:wagon-scm</tt></a></li>
+<li><a href="https://wagon-svn.dev.java.net" class="externalLink"><tt>org.jvnet.wagon-svn:wagon-svn</tt></a></li>
 </ul>
 </div>
 </div>
