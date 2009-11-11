@@ -42,18 +42,16 @@
 
     <distributionManagement>
         <repository>
-            <id>maven-svn-wagon.googlecode.com/svn/m2/release</id>
-            <url>file://${project.build.directory}/distribution/m2/release</url>
-            <uniqueVersion>false</uniqueVersion>
+            <id>oss.sonatype.org</id>
+            <url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
-            <id>maven-svn-wagon.googlecode.com/svn/m2/snapshot</id>
-            <url>file://${project.build.directory}/distribution/m2/snapshot</url>
-            <uniqueVersion>false</uniqueVersion>
+            <id>oss.sonatype.org</id>
+            <url>http://oss.sonatype.org/content/repositories/googlecode-snapshots</url>
         </snapshotRepository>
         <site>
-            <id>maven-svn-wagon.googlecode.com/svn/m2/site</id>
-            <url>file://${project.build.directory}/distribution/m2/site</url>
+            <id>${project.artifactId} site</id>
+            <url>file://${project.build.directory}/staging/deploy/site</url>
         </site>
     </distributionManagement>
 
