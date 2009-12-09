@@ -80,10 +80,10 @@ public class SVNWagon extends AbstractWagon {
     }
 
 
-    /** The subversion repository root. */
+    /** The Subversion repository root. */
     private SVNURL svnRepositoryRoot;
 
-    /** The path of the requested wagon repository relative to the subversion repository root. */
+    /** The path of the requested wagon repository relative to the Subversion repository root. */
     private String wagonRepositoryPath;
 
 
@@ -97,7 +97,7 @@ public class SVNWagon extends AbstractWagon {
     /** The editor for write operations. */
     private ISVNEditor writeEditor;
 
-    /** The subversion options used for write operations. */
+    /** The Subversion options used for write operations. */
     private ISVNOptions writeOptions;
 
     /** Indicates whether some write operation was actually attempted. */
@@ -383,11 +383,11 @@ public class SVNWagon extends AbstractWagon {
 
 
     /**
-     * Converts the wagon resource name to the subversion repository path.
+     * Converts the wagon resource name to the Subversion repository path.
      *
      * @param repositoryResourceName the resource name relative to the wagon repository root
      *
-     * @return the resource name relative to the subversion repository root
+     * @return the resource name relative to the Subversion repository root
      */
     private String getResourcePath(String repositoryResourceName) {
         if (".".equals(repositoryResourceName)) {
@@ -405,7 +405,7 @@ public class SVNWagon extends AbstractWagon {
     /**
      * Returns the auto-properties applicable for the file with specified name.
      *
-     * @param repositoryResourcePath the resource name relative to the subversion repository root
+     * @param repositoryResourcePath the resource name relative to the Subversion repository root
      *
      * @return the auto-properties for a file with specified name
      */
