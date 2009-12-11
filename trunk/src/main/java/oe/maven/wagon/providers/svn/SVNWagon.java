@@ -113,26 +113,26 @@ public class SVNWagon extends AbstractWagon {
     @Override
     protected void openConnectionInternal() throws ConnectionException, AuthenticationException {
         String wagonRepositoryUrl = repository.getUrl();
-        if (!wagonRepositoryUrl.startsWith("svn:")) {
-            throw new AssertionError("unexpected wagon protocol: " + wagonRepositoryUrl);
+        if ( !wagonRepositoryUrl.startsWith( "svn:" ) ) {
+            throw new AssertionError( "unexpected wagon protocol: " + wagonRepositoryUrl );
         }
         try {
-            SVNURL wagonRepositoryRoot = SVNURL.parseURIDecoded(wagonRepositoryUrl.substring("svn:".length()));
-            SVNRepository svnRepository = SVNRepositoryFactory.create(wagonRepositoryRoot);
-            svnRepository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager());
-            svnRepositoryRoot = svnRepository.getRepositoryRoot(true);
+            SVNURL wagonRepositoryRoot = SVNURL.parseURIDecoded( wagonRepositoryUrl.substring( "svn:".length() ) );
+            SVNRepository svnRepository = SVNRepositoryFactory.create( wagonRepositoryRoot );
+            svnRepository.setAuthenticationManager( SVNWCUtil.createDefaultAuthenticationManager() );
+            svnRepositoryRoot = svnRepository.getRepositoryRoot( true );
             svnRepository.closeSession();
-            wagonRepositoryPath = wagonRepositoryRoot.getPath().substring(svnRepositoryRoot.getPath().length());
-            if (wagonRepositoryPath.startsWith("/")) {
-                wagonRepositoryPath = wagonRepositoryPath.substring(1);
+            wagonRepositoryPath = wagonRepositoryRoot.getPath().substring( svnRepositoryRoot.getPath().length() );
+            if ( wagonRepositoryPath.startsWith( "/" ) ) {
+                wagonRepositoryPath = wagonRepositoryPath.substring( 1 );
             }
-            if (wagonRepositoryPath.endsWith("/")) {
-                wagonRepositoryPath = wagonRepositoryPath.substring(0, wagonRepositoryPath.length() - 1);
+            if ( wagonRepositoryPath.endsWith( "/" ) ) {
+                wagonRepositoryPath = wagonRepositoryPath.substring( 0, wagonRepositoryPath.length() - 1 );
             }
-        } catch (SVNAuthenticationException e) {
-            throw new AuthenticationException(e.getMessage(), e);
-        } catch (SVNException e) {
-            throw new ConnectionException(e.getMessage(), e);
+        } catch ( SVNAuthenticationException e ) {
+            throw new AuthenticationException( e.getMessage(), e );
+        } catch ( SVNException e ) {
+            throw new ConnectionException( e.getMessage(), e );
         }
     }
 
@@ -142,14 +142,14 @@ public class SVNWagon extends AbstractWagon {
         wagonRepositoryPath = null;
         try {
             commitWriteSession();
-        } catch (SVNException e) {
-            throw new ConnectionException(e.getMessage(), e);
+        } catch ( SVNException e ) {
+            throw new ConnectionException( e.getMessage(), e );
         } finally {
-            if (writeRepository != null) {
+            if ( writeRepository != null ) {
                 writeRepository.closeSession();
                 writeRepository = null;
             }
-            if (readRepository != null) {
+            if ( readRepository != null ) {
                 readRepository.closeSession();
                 readRepository = null;
             }
@@ -158,87 +158,87 @@ public class SVNWagon extends AbstractWagon {
 
 
     @Override
-    public boolean resourceExists(String repositoryResourceName) throws TransferFailedException, AuthorizationException {
-        String repositoryResourcePath = getResourcePath(repositoryResourceName);
+    public boolean resourceExists( String repositoryResourceName ) throws TransferFailedException, AuthorizationException {
+        String repositoryResourcePath = getResourcePath( repositoryResourceName );
         try {
-            SVNNodeKind repositoryResourceKind = getReadRepository().checkPath(repositoryResourcePath, -1);
-            return !SVNNodeKind.NONE.equals(repositoryResourceKind);
-        } catch (SVNAuthenticationException e) {
-            throw new AuthorizationException(e.getMessage(), e);
-        } catch (SVNException e) {
-            throw new TransferFailedException(e.getMessage(), e);
+            SVNNodeKind repositoryResourceKind = getReadRepository().checkPath( repositoryResourcePath, -1 );
+            return !SVNNodeKind.NONE.equals( repositoryResourceKind );
+        } catch ( SVNAuthenticationException e ) {
+            throw new AuthorizationException( e.getMessage(), e );
+        } catch ( SVNException e ) {
+            throw new TransferFailedException( e.getMessage(), e );
         }
     }
 
 
-    public void get(String repositoryResourceName, File localFile) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
-        String repositoryResourcePath = getResourcePath(repositoryResourceName);
+    public void get( String repositoryResourceName, File localFile ) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
+        String repositoryResourcePath = getResourcePath( repositoryResourceName );
         try {
-            if (addedEntries != null && addedEntries.contains(repositoryResourcePath)) {
+            if ( addedEntries != null && addedEntries.contains( repositoryResourcePath ) ) {
                 commitWriteSession();
             }
-            SVNNodeKind repositoryResourceKind = getReadRepository().checkPath(repositoryResourcePath, -1);
-            if (SVNNodeKind.FILE.equals(repositoryResourceKind)) {
-                getInternal(repositoryResourcePath, localFile, new Resource(repositoryResourceName));
-            } else if (SVNNodeKind.NONE.equals(repositoryResourceKind)) {
-                throw new ResourceDoesNotExistException(repositoryResourceName + " does not exist");
+            SVNNodeKind repositoryResourceKind = getReadRepository().checkPath( repositoryResourcePath, -1 );
+            if ( SVNNodeKind.FILE.equals( repositoryResourceKind ) ) {
+                getInternal( repositoryResourcePath, localFile, new Resource( repositoryResourceName ) );
+            } else if ( SVNNodeKind.NONE.equals( repositoryResourceKind ) ) {
+                throw new ResourceDoesNotExistException( repositoryResourceName + " does not exist" );
             } else {
-                throw new ResourceDoesNotExistException(repositoryResourceName + " is not a file");
+                throw new ResourceDoesNotExistException( repositoryResourceName + " is not a file" );
             }
-        } catch (SVNAuthenticationException e) {
-            throw new AuthorizationException(e.getMessage(), e);
-        } catch (SVNException e) {
-            throw new TransferFailedException(e.getMessage(), e);
+        } catch ( SVNAuthenticationException e ) {
+            throw new AuthorizationException( e.getMessage(), e );
+        } catch ( SVNException e ) {
+            throw new TransferFailedException( e.getMessage(), e );
         }
     }
 
-    public boolean getIfNewer(String repositoryResourceName, File localFile, long timestamp) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
-        String repositoryResourcePath = getResourcePath(repositoryResourceName);
+    public boolean getIfNewer( String repositoryResourceName, File localFile, long timestamp ) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
+        String repositoryResourcePath = getResourcePath( repositoryResourceName );
         try {
-            if (addedEntries != null && addedEntries.contains(repositoryResourcePath)) {
+            if ( addedEntries != null && addedEntries.contains( repositoryResourcePath ) ) {
                 commitWriteSession();
             }
-            SVNDirEntry repositoryResourceEntry = getReadRepository().info(repositoryResourcePath, -1);
-            if (repositoryResourceEntry == null) {
-                throw new ResourceDoesNotExistException(repositoryResourceName + " does not exist");
-            } else if (SVNNodeKind.FILE.equals(repositoryResourceEntry.getKind())) {
-                if (repositoryResourceEntry.getDate().getTime() <= timestamp) {
-                    fireGetInitiated(new Resource(repositoryResourceName), localFile); // expected by the org.apache.maven.wagon.WagonTestCase
+            SVNDirEntry repositoryResourceEntry = getReadRepository().info( repositoryResourcePath, -1 );
+            if ( repositoryResourceEntry == null ) {
+                throw new ResourceDoesNotExistException( repositoryResourceName + " does not exist" );
+            } else if ( SVNNodeKind.FILE.equals( repositoryResourceEntry.getKind() ) ) {
+                if ( repositoryResourceEntry.getDate().getTime() <= timestamp ) {
+                    fireGetInitiated( new Resource( repositoryResourceName ), localFile ); // expected by the org.apache.maven.wagon.WagonTestCase
                     return false;
                 } else {
-                    getInternal(repositoryResourcePath, localFile, new Resource(repositoryResourceName));
+                    getInternal( repositoryResourcePath, localFile, new Resource( repositoryResourceName ) );
                     return true;
                 }
             } else {
-                throw new ResourceDoesNotExistException(repositoryResourceName + " is not a file");
+                throw new ResourceDoesNotExistException( repositoryResourceName + " is not a file" );
             }
-        } catch (SVNAuthenticationException e) {
-            throw new AuthorizationException(e.getMessage(), e);
-        } catch (SVNException e) {
-            throw new TransferFailedException(e.getMessage(), e);
+        } catch ( SVNAuthenticationException e ) {
+            throw new AuthorizationException( e.getMessage(), e );
+        } catch ( SVNException e ) {
+            throw new TransferFailedException( e.getMessage(), e );
         }
     }
 
 
-    public void put(File localFile, String repositoryResourceName) throws TransferFailedException, AuthorizationException {
-        if (repositoryResourceName.endsWith(".asc.md5") || repositoryResourceName.endsWith(".asc.sha1")) {
+    public void put( File localFile, String repositoryResourceName ) throws TransferFailedException, AuthorizationException {
+        if ( repositoryResourceName.endsWith( ".asc.md5" ) || repositoryResourceName.endsWith( ".asc.sha1" ) ) {
             // HACK: unnecessary artifacts of maven-gpg-plugin and maven-deploy-plugin combination
             return;
         }
-        String repositoryResourcePath = getResourcePath(repositoryResourceName);
+        String repositoryResourcePath = getResourcePath( repositoryResourceName );
         try {
-            ISVNEditor editor = getWriteEditor(repositoryResourcePath);
-            String[] pathComponents = repositoryResourcePath.split("/");
-            openDirectoriesInternal(editor, pathComponents, 0, pathComponents.length - 1);
-            putFileInternal(localFile, repositoryResourcePath, new Resource(repositoryResourceName));
-            closeDirectoriesInternal(editor, pathComponents.length - 1);
-        } catch (SVNAuthenticationException e) {
+            ISVNEditor editor = getWriteEditor( repositoryResourcePath );
+            String[] pathComponents = repositoryResourcePath.split( "/" );
+            openDirectoriesInternal( editor, pathComponents, 0, pathComponents.length - 1 );
+            putFileInternal( localFile, repositoryResourcePath, new Resource( repositoryResourceName ) );
+            closeDirectoriesInternal( editor, pathComponents.length - 1 );
+        } catch ( SVNAuthenticationException e ) {
             writeSuccessful = false;
-            throw new AuthorizationException(e.getMessage(), e);
-        } catch (SVNException e) {
+            throw new AuthorizationException( e.getMessage(), e );
+        } catch ( SVNException e ) {
             writeSuccessful = false;
-            throw new TransferFailedException(e.getMessage(), e);
-        } catch (TransferFailedException e) {
+            throw new TransferFailedException( e.getMessage(), e );
+        } catch ( TransferFailedException e ) {
             writeSuccessful = false;
             throw e;
         }
@@ -251,21 +251,21 @@ public class SVNWagon extends AbstractWagon {
     }
 
     @Override
-    public void putDirectory(File localDirectory, String repositoryDirectoryName) throws TransferFailedException, AuthorizationException {
-        String repositoryDirectoryPath = getResourcePath(repositoryDirectoryName);
+    public void putDirectory( File localDirectory, String repositoryDirectoryName ) throws TransferFailedException, AuthorizationException {
+        String repositoryDirectoryPath = getResourcePath( repositoryDirectoryName );
         try {
-            ISVNEditor editor = getWriteEditor(repositoryDirectoryPath);
-            String[] pathComponents = repositoryDirectoryPath.split("/");
-            openDirectoriesInternal(editor, pathComponents, 0, pathComponents.length - 1);
-            putDirectoryInternal(localDirectory, repositoryDirectoryPath, new Resource(repositoryDirectoryName));
-            closeDirectoriesInternal(editor, pathComponents.length - 1);
-        } catch (SVNAuthenticationException e) {
+            ISVNEditor editor = getWriteEditor( repositoryDirectoryPath );
+            String[] pathComponents = repositoryDirectoryPath.split( "/" );
+            openDirectoriesInternal( editor, pathComponents, 0, pathComponents.length - 1 );
+            putDirectoryInternal( localDirectory, repositoryDirectoryPath, new Resource( repositoryDirectoryName ) );
+            closeDirectoriesInternal( editor, pathComponents.length - 1 );
+        } catch ( SVNAuthenticationException e ) {
             writeSuccessful = false;
-            throw new AuthorizationException(e.getMessage(), e);
-        } catch (SVNException e) {
+            throw new AuthorizationException( e.getMessage(), e );
+        } catch ( SVNException e ) {
             writeSuccessful = false;
-            throw new TransferFailedException(e.getMessage(), e);
-        } catch (TransferFailedException e) {
+            throw new TransferFailedException( e.getMessage(), e );
+        } catch ( TransferFailedException e ) {
             writeSuccessful = false;
             throw e;
         }
@@ -273,31 +273,31 @@ public class SVNWagon extends AbstractWagon {
 
 
     @Override
-    public List<String> getFileList(String repositoryDirectoryName) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
-        String repositoryDirectoryPath = getResourcePath(repositoryDirectoryName);
+    public List<String> getFileList( String repositoryDirectoryName ) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
+        String repositoryDirectoryPath = getResourcePath( repositoryDirectoryName );
         try {
-            SVNNodeKind repositoryDirectoryKind = getReadRepository().checkPath(repositoryDirectoryPath, -1);
-            if (SVNNodeKind.DIR.equals(repositoryDirectoryKind)) {
-                @SuppressWarnings("unchecked")
-                Collection<SVNDirEntry> repositoryDirectoryEntries = getReadRepository().getDir(repositoryDirectoryPath, -1, null, (Collection<SVNDirEntry>) null);
+            SVNNodeKind repositoryDirectoryKind = getReadRepository().checkPath( repositoryDirectoryPath, -1 );
+            if ( SVNNodeKind.DIR.equals( repositoryDirectoryKind ) ) {
+                @SuppressWarnings( "unchecked" )
+                Collection<SVNDirEntry> repositoryDirectoryEntries = getReadRepository().getDir( repositoryDirectoryPath, -1, null, ( Collection<SVNDirEntry> ) null );
                 List<String> list = new ArrayList<String>();
-                for (SVNDirEntry entry : repositoryDirectoryEntries) {
-                    if (SVNNodeKind.DIR.equals(entry.getKind())) {
-                        list.add(entry.getRelativePath() + '/');
+                for ( SVNDirEntry entry : repositoryDirectoryEntries ) {
+                    if ( SVNNodeKind.DIR.equals( entry.getKind() ) ) {
+                        list.add( entry.getRelativePath() + '/' );
                     } else {
-                        list.add(entry.getRelativePath());
+                        list.add( entry.getRelativePath() );
                     }
                 }
                 return list;
-            } else if (SVNNodeKind.NONE.equals(repositoryDirectoryKind)) {
-                throw new ResourceDoesNotExistException(repositoryDirectoryName + " does not exist");
+            } else if ( SVNNodeKind.NONE.equals( repositoryDirectoryKind ) ) {
+                throw new ResourceDoesNotExistException( repositoryDirectoryName + " does not exist" );
             } else {
-                throw new ResourceDoesNotExistException(repositoryDirectoryName + " is not a directory");
+                throw new ResourceDoesNotExistException( repositoryDirectoryName + " is not a directory" );
             }
-        } catch (SVNAuthenticationException e) {
-            throw new AuthorizationException(e.getMessage(), e);
-        } catch (SVNException e) {
-            throw new TransferFailedException(e.getMessage(), e);
+        } catch ( SVNAuthenticationException e ) {
+            throw new AuthorizationException( e.getMessage(), e );
+        } catch ( SVNException e ) {
+            throw new TransferFailedException( e.getMessage(), e );
         }
     }
 
@@ -312,9 +312,9 @@ public class SVNWagon extends AbstractWagon {
      * @throws SVNException if an SVN error occurred
      */
     private SVNRepository getReadRepository() throws SVNException {
-        if (readRepository == null) {
-            readRepository = SVNRepositoryFactory.create(svnRepositoryRoot);
-            readRepository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager());
+        if ( readRepository == null ) {
+            readRepository = SVNRepositoryFactory.create( svnRepositoryRoot );
+            readRepository.setAuthenticationManager( SVNWCUtil.createDefaultAuthenticationManager() );
         }
         return readRepository;
     }
@@ -329,9 +329,9 @@ public class SVNWagon extends AbstractWagon {
      * @throws SVNException if an SVN error occurred
      */
     private SVNRepository getWriteRepository() throws SVNException {
-        if (writeRepository == null) {
-            writeRepository = SVNRepositoryFactory.create(svnRepositoryRoot);
-            writeRepository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager());
+        if ( writeRepository == null ) {
+            writeRepository = SVNRepositoryFactory.create( svnRepositoryRoot );
+            writeRepository.setAuthenticationManager( SVNWCUtil.createDefaultAuthenticationManager() );
         }
         return writeRepository;
     }
@@ -347,13 +347,13 @@ public class SVNWagon extends AbstractWagon {
      *
      * @throws SVNException if an SVN error occurred
      */
-    private ISVNEditor getWriteEditor(String message) throws SVNException {
-        if (writeEditor == null) {
+    private ISVNEditor getWriteEditor( String message ) throws SVNException {
+        if ( writeEditor == null ) {
             writeAttempted = false;
             writeSuccessful = true;
-            writeEditor = getWriteRepository().getCommitEditor("[maven-svn-wagon] " + message, null, false, null, null);
-            writeEditor.openRoot(-1);
-            writeOptions = SVNWCUtil.createDefaultOptions(true);
+            writeEditor = getWriteRepository().getCommitEditor( "[maven-svn-wagon] " + message, null, false, null, null );
+            writeEditor.openRoot( -1 );
+            writeOptions = SVNWCUtil.createDefaultOptions( true );
             addedEntries = new HashSet<String>();
         }
         return writeEditor;
@@ -365,9 +365,9 @@ public class SVNWagon extends AbstractWagon {
      * @throws SVNException if an SVN error occurred
      */
     private void commitWriteSession() throws SVNException {
-        if (writeEditor != null) {
+        if ( writeEditor != null ) {
             try {
-                if (writeAttempted && writeSuccessful) {
+                if ( writeAttempted && writeSuccessful ) {
                     writeEditor.closeDir();
                     writeEditor.closeEdit();
                 } else {
@@ -389,15 +389,15 @@ public class SVNWagon extends AbstractWagon {
      *
      * @return the resource name relative to the Subversion repository root
      */
-    private String getResourcePath(String repositoryResourceName) {
-        if (".".equals(repositoryResourceName)) {
+    private String getResourcePath( String repositoryResourceName ) {
+        if ( ".".equals( repositoryResourceName ) ) {
             return wagonRepositoryPath;
         }
-        if (repositoryResourceName.startsWith(".")) {
-            repositoryResourceName = repositoryResourceName.substring(1);
+        if ( repositoryResourceName.startsWith( "." ) ) {
+            repositoryResourceName = repositoryResourceName.substring( 1 );
         }
-        if (repositoryResourceName.startsWith("/") || repositoryResourceName.startsWith("\\")) {
-            repositoryResourceName = repositoryResourceName.substring(1);
+        if ( repositoryResourceName.startsWith( "/" ) || repositoryResourceName.startsWith( "\\" ) ) {
+            repositoryResourceName = repositoryResourceName.substring( 1 );
         }
         return wagonRepositoryPath.isEmpty() ? repositoryResourceName : wagonRepositoryPath + '/' + repositoryResourceName;
     }
@@ -409,16 +409,16 @@ public class SVNWagon extends AbstractWagon {
      *
      * @return the auto-properties for a file with specified name
      */
-    private Map<String, String> getAutoProperties(String repositoryResourcePath) {
-        @SuppressWarnings("unchecked")
-        Map<String, String> autoProperties = writeOptions.applyAutoProperties(new File(repositoryResourcePath), null);
-        if (!autoProperties.containsKey(SVNProperty.MIME_TYPE)) {
-            int lastDot = repositoryResourcePath.lastIndexOf('.');
-            if (lastDot >= 0) {
-                String extension = repositoryResourcePath.substring(lastDot + 1);
-                String mimeType = (String) writeOptions.getFileExtensionsToMimeTypes().get(extension);
-                if (mimeType != null) {
-                    autoProperties.put(SVNProperty.MIME_TYPE, mimeType);
+    private Map<String, String> getAutoProperties( String repositoryResourcePath ) {
+        @SuppressWarnings( "unchecked" )
+        Map<String, String> autoProperties = writeOptions.applyAutoProperties( new File( repositoryResourcePath ), null );
+        if ( !autoProperties.containsKey( SVNProperty.MIME_TYPE ) ) {
+            int lastDot = repositoryResourcePath.lastIndexOf( '.' );
+            if ( lastDot >= 0 ) {
+                String extension = repositoryResourcePath.substring( lastDot + 1 );
+                String mimeType = ( String ) writeOptions.getFileExtensionsToMimeTypes().get( extension );
+                if ( mimeType != null ) {
+                    autoProperties.put( SVNProperty.MIME_TYPE, mimeType );
                 }
             }
         }
@@ -426,147 +426,147 @@ public class SVNWagon extends AbstractWagon {
     }
 
 
-    private void openDirectoriesInternal(ISVNEditor editor, String[] pathComponents, int offset, int count) throws TransferFailedException, SVNException {
+    private void openDirectoriesInternal( ISVNEditor editor, String[] pathComponents, int offset, int count ) throws TransferFailedException, SVNException {
         String repositoryDirectoryPath = null;
-        for (int i = 0; i < count; i++) {
-            String pathComponent = pathComponents[offset + i];
+        for ( int i = 0; i < count; i++ ) {
+            String pathComponent = pathComponents[ offset + i ];
             repositoryDirectoryPath = repositoryDirectoryPath == null ? pathComponent : repositoryDirectoryPath + '/' + pathComponent;
-            openDirectoryInternal(editor, repositoryDirectoryPath);
+            openDirectoryInternal( editor, repositoryDirectoryPath );
         }
     }
 
-    private void openDirectoryInternal(ISVNEditor editor, String repositoryDirectoryPath) throws TransferFailedException, SVNException {
-        SVNNodeKind repositoryDirectoryKind = getReadRepository().checkPath(repositoryDirectoryPath, -1);
+    private void openDirectoryInternal( ISVNEditor editor, String repositoryDirectoryPath ) throws TransferFailedException, SVNException {
+        SVNNodeKind repositoryDirectoryKind = getReadRepository().checkPath( repositoryDirectoryPath, -1 );
         boolean repositoryDirectoryExists;
-        if (SVNNodeKind.DIR.equals(repositoryDirectoryKind)) {
+        if ( SVNNodeKind.DIR.equals( repositoryDirectoryKind ) ) {
             repositoryDirectoryExists = true;
-        } else if (SVNNodeKind.NONE.equals(repositoryDirectoryKind)) {
+        } else if ( SVNNodeKind.NONE.equals( repositoryDirectoryKind ) ) {
             repositoryDirectoryExists = false;
         } else {
-            throw new TransferFailedException(repositoryDirectoryPath + " is not a directory");
+            throw new TransferFailedException( repositoryDirectoryPath + " is not a directory" );
         }
-        if (repositoryDirectoryExists || addedEntries.contains(repositoryDirectoryPath)) {
-            editor.openDir(repositoryDirectoryPath, -1);
+        if ( repositoryDirectoryExists || addedEntries.contains( repositoryDirectoryPath ) ) {
+            editor.openDir( repositoryDirectoryPath, -1 );
         } else {
             writeAttempted = true;
-            addedEntries.add(repositoryDirectoryPath);
-            editor.addDir(repositoryDirectoryPath, null, -1);
+            addedEntries.add( repositoryDirectoryPath );
+            editor.addDir( repositoryDirectoryPath, null, -1 );
         }
     }
 
-    private void closeDirectoriesInternal(ISVNEditor editor, int count) throws SVNException {
-        for (int i = 0; i < count; i++) {
-            closeDirectoryInternal(editor);
+    private void closeDirectoriesInternal( ISVNEditor editor, int count ) throws SVNException {
+        for ( int i = 0; i < count; i++ ) {
+            closeDirectoryInternal( editor );
         }
     }
 
-    private void closeDirectoryInternal(ISVNEditor editor) throws SVNException {
+    private void closeDirectoryInternal( ISVNEditor editor ) throws SVNException {
         editor.closeDir();
     }
 
-    private void getInternal(String repositoryResourcePath, File localFile, Resource wagonResource) throws TransferFailedException, SVNException {
-        if (addedEntries != null && addedEntries.contains(repositoryResourcePath)) {
-            throw new AssertionError("unexpected wagon state");
+    private void getInternal( String repositoryResourcePath, File localFile, Resource wagonResource ) throws TransferFailedException, SVNException {
+        if ( addedEntries != null && addedEntries.contains( repositoryResourcePath ) ) {
+            throw new AssertionError( "unexpected wagon state" );
         }
-        fireGetInitiated(wagonResource, localFile);
-        if (!localFile.getParentFile().exists() && !localFile.getParentFile().mkdirs()) {
-            throw new TransferFailedException("failed to create " + localFile.getParentFile());
+        fireGetInitiated( wagonResource, localFile );
+        if ( !localFile.getParentFile().exists() && !localFile.getParentFile().mkdirs() ) {
+            throw new TransferFailedException( "failed to create " + localFile.getParentFile() );
         }
-        SVNDirEntry entry = getReadRepository().info(repositoryResourcePath, -1);
-        wagonResource.setContentLength(entry.getSize());
-        wagonResource.setLastModified(entry.getDate().getTime());
-        fireGetStarted(wagonResource, localFile);
+        SVNDirEntry entry = getReadRepository().info( repositoryResourcePath, -1 );
+        wagonResource.setContentLength( entry.getSize() );
+        wagonResource.setLastModified( entry.getDate().getTime() );
+        fireGetStarted( wagonResource, localFile );
         FileOutputStream outputStream = null;
         try {
-            outputStream = new FileOutputStream(localFile);
-            getReadRepository().getFile(repositoryResourcePath, -1, null, outputStream);
-        } catch (FileNotFoundException e) {
-            fireTransferError(wagonResource, e, TransferEvent.REQUEST_GET);
-            throw new TransferFailedException(e.toString(), e);
-        } catch (SVNException e) {
-            fireTransferError(wagonResource, e, TransferEvent.REQUEST_GET);
+            outputStream = new FileOutputStream( localFile );
+            getReadRepository().getFile( repositoryResourcePath, -1, null, outputStream );
+        } catch ( FileNotFoundException e ) {
+            fireTransferError( wagonResource, e, TransferEvent.REQUEST_GET );
+            throw new TransferFailedException( e.toString(), e );
+        } catch ( SVNException e ) {
+            fireTransferError( wagonResource, e, TransferEvent.REQUEST_GET );
             throw e;
         } finally {
-            if (outputStream != null) {
+            if ( outputStream != null ) {
                 try {
                     outputStream.close();
-                } catch (IOException ignored) {
+                } catch ( IOException ignored ) {
                 }
             }
         }
-        postProcessListeners(wagonResource, localFile, TransferEvent.REQUEST_GET);
-        fireGetCompleted(wagonResource, localFile);
+        postProcessListeners( wagonResource, localFile, TransferEvent.REQUEST_GET );
+        fireGetCompleted( wagonResource, localFile );
     }
 
-    private void putFileInternal(File localFile, String repositoryResourcePath, Resource wagonResource) throws TransferFailedException, SVNException {
-        if (repositoryResourcePath.startsWith("/")) {
-            throw new AssertionError("unexpected repository path: " + repositoryResourcePath);
+    private void putFileInternal( File localFile, String repositoryResourcePath, Resource wagonResource ) throws TransferFailedException, SVNException {
+        if ( repositoryResourcePath.startsWith( "/" ) ) {
+            throw new AssertionError( "unexpected repository path: " + repositoryResourcePath );
         }
-        ISVNEditor editor = getWriteEditor(repositoryResourcePath);
-        SVNNodeKind repositoryResourceKind = getReadRepository().checkPath(repositoryResourcePath, -1);
+        ISVNEditor editor = getWriteEditor( repositoryResourcePath );
+        SVNNodeKind repositoryResourceKind = getReadRepository().checkPath( repositoryResourcePath, -1 );
         boolean repositoryResourceExists;
-        if (SVNNodeKind.FILE.equals(repositoryResourceKind)) {
+        if ( SVNNodeKind.FILE.equals( repositoryResourceKind ) ) {
             repositoryResourceExists = true;
-        } else if (SVNNodeKind.NONE.equals(repositoryResourceKind)) {
+        } else if ( SVNNodeKind.NONE.equals( repositoryResourceKind ) ) {
             repositoryResourceExists = false;
         } else {
-            throw new TransferFailedException(repositoryResourcePath + " exists and is not a file");
+            throw new TransferFailedException( repositoryResourcePath + " exists and is not a file" );
         }
-        firePutInitiated(wagonResource, localFile);
-        wagonResource.setContentLength(localFile.length());
-        wagonResource.setLastModified(localFile.lastModified());
-        firePutStarted(wagonResource, localFile);
+        firePutInitiated( wagonResource, localFile );
+        wagonResource.setContentLength( localFile.length() );
+        wagonResource.setLastModified( localFile.lastModified() );
+        firePutStarted( wagonResource, localFile );
         SVNDeltaGenerator deltaGenerator = new SVNDeltaGenerator();
         FileInputStream inputStream = null;
         try {
-            inputStream = new FileInputStream(localFile);
-            if (repositoryResourceExists || addedEntries.contains(repositoryResourcePath)) {
+            inputStream = new FileInputStream( localFile );
+            if ( repositoryResourceExists || addedEntries.contains( repositoryResourcePath ) ) {
                 writeAttempted = true;
-                editor.openFile(repositoryResourcePath, -1);
+                editor.openFile( repositoryResourcePath, -1 );
             } else {
                 writeAttempted = true;
-                addedEntries.add(repositoryResourcePath);
-                editor.addFile(repositoryResourcePath, null, -1);
-                Map<String, String> autoProperties = getAutoProperties(repositoryResourcePath);
-                for (Map.Entry<String, String> entry : autoProperties.entrySet()) {
-                    editor.changeFileProperty(repositoryResourcePath, entry.getKey(), SVNPropertyValue.create(entry.getValue()));
+                addedEntries.add( repositoryResourcePath );
+                editor.addFile( repositoryResourcePath, null, -1 );
+                Map<String, String> autoProperties = getAutoProperties( repositoryResourcePath );
+                for ( Map.Entry<String, String> entry : autoProperties.entrySet() ) {
+                    editor.changeFileProperty( repositoryResourcePath, entry.getKey(), SVNPropertyValue.create( entry.getValue() ) );
                 }
             }
-            editor.applyTextDelta(repositoryResourcePath, null);
-            String checksum = deltaGenerator.sendDelta(repositoryResourcePath, inputStream, editor, true);
-            editor.closeFile(repositoryResourcePath, checksum);
-        } catch (FileNotFoundException e) {
-            fireTransferError(wagonResource, e, TransferEvent.REQUEST_PUT);
-            throw new TransferFailedException(e.toString(), e);
-        } catch (SVNException e) {
-            fireTransferError(wagonResource, e, TransferEvent.REQUEST_PUT);
+            editor.applyTextDelta( repositoryResourcePath, null );
+            String checksum = deltaGenerator.sendDelta( repositoryResourcePath, inputStream, editor, true );
+            editor.closeFile( repositoryResourcePath, checksum );
+        } catch ( FileNotFoundException e ) {
+            fireTransferError( wagonResource, e, TransferEvent.REQUEST_PUT );
+            throw new TransferFailedException( e.toString(), e );
+        } catch ( SVNException e ) {
+            fireTransferError( wagonResource, e, TransferEvent.REQUEST_PUT );
             throw e;
         } finally {
-            if (inputStream != null) {
+            if ( inputStream != null ) {
                 try {
                     inputStream.close();
-                } catch (IOException ignored) {
+                } catch ( IOException ignored ) {
                 }
             }
         }
-        postProcessListeners(wagonResource, localFile, TransferEvent.REQUEST_PUT);
-        firePutCompleted(wagonResource, localFile);
+        postProcessListeners( wagonResource, localFile, TransferEvent.REQUEST_PUT );
+        firePutCompleted( wagonResource, localFile );
     }
 
-    private void putDirectoryInternal(File localDirectory, String repositoryDirectoryPath, Resource wagonResource) throws TransferFailedException, SVNException {
-        ISVNEditor editor = getWriteEditor(repositoryDirectoryPath);
-        openDirectoryInternal(editor, repositoryDirectoryPath);
+    private void putDirectoryInternal( File localDirectory, String repositoryDirectoryPath, Resource wagonResource ) throws TransferFailedException, SVNException {
+        ISVNEditor editor = getWriteEditor( repositoryDirectoryPath );
+        openDirectoryInternal( editor, repositoryDirectoryPath );
         File[] localDirectoryContents = localDirectory.listFiles();
-        for (File file : localDirectoryContents) {
-            Resource wagonFileResource = new Resource(wagonResource.getName() + '/' + file.getName());
-            String repositoryFilePath = getResourcePath(wagonFileResource.getName());
-            if (file.isDirectory()) {
-                putDirectoryInternal(file, repositoryFilePath, wagonFileResource);
+        for ( File file : localDirectoryContents ) {
+            Resource wagonFileResource = new Resource( wagonResource.getName() + '/' + file.getName() );
+            String repositoryFilePath = getResourcePath( wagonFileResource.getName() );
+            if ( file.isDirectory() ) {
+                putDirectoryInternal( file, repositoryFilePath, wagonFileResource );
             } else {
-                putFileInternal(file, repositoryFilePath, wagonFileResource);
+                putFileInternal( file, repositoryFilePath, wagonFileResource );
             }
         }
-        closeDirectoryInternal(editor);
+        closeDirectoryInternal( editor );
     }
 
 }
