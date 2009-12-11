@@ -46,18 +46,18 @@ public class FileSVNWagonTest extends AbstractSVNWagonTest {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        File file = new File(getBasedir(), "target/test/svn/maven-svn-wagon-test-repository");
+        File file = new File( getBasedir(), "target/test/svn/maven-svn-wagon-test-repository" );
         tempRepositoryPath = file.getAbsolutePath();
-        if (!file.exists() && !file.mkdirs()) {
-            throw new AssertionError("failed to create " + file);
+        if ( !file.exists() && !file.mkdirs() ) {
+            throw new AssertionError( "failed to create " + file );
         }
-        FileUtils.cleanDirectory(tempRepositoryPath);
-        tempRepositoryUrl = SVNRepositoryFactory.createLocalRepository(file, true, false);
+        FileUtils.cleanDirectory( tempRepositoryPath );
+        tempRepositoryUrl = SVNRepositoryFactory.createLocalRepository( file, true, false );
     }
 
     @Override
     protected void tearDown() throws Exception {
-        FileUtils.deleteDirectory(tempRepositoryPath);
+        FileUtils.deleteDirectory( tempRepositoryPath );
         super.tearDown();
     }
 

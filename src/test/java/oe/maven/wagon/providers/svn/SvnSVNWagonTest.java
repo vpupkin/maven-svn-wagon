@@ -48,24 +48,24 @@ public class SvnSVNWagonTest extends AbstractSVNWagonTest {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        File file = new File(getBasedir(), "target/test/svn/maven-svn-wagon-test-repository");
+        File file = new File( getBasedir(), "target/test/svn/maven-svn-wagon-test-repository" );
         tempRepositoryPath = file.getAbsolutePath();
-        if (!file.exists() && !file.mkdirs()) {
-            throw new AssertionError("failed to create " + file);
+        if ( !file.exists() && !file.mkdirs() ) {
+            throw new AssertionError( "failed to create " + file );
         }
-        FileUtils.cleanDirectory(tempRepositoryPath);
-        SVNRepositoryFactory.createLocalRepository(file, true, false);
-        FileUtils.fileWrite(tempRepositoryPath + "/conf/svnserve.conf", "[general]\nanon-access = write\n");
-        tempRepositoryUrl = SVNURL.create("svn", null, "localhost", 3691, "maven-svn-wagon-test-repository", false);
-        File svnserveRoot = new File(getBasedir(), "target/test/svn");
-        ProcessBuilder builder = new ProcessBuilder("svnserve", "-d", "--listen-port", "3691", "-r", svnserveRoot.getAbsolutePath());
+        FileUtils.cleanDirectory( tempRepositoryPath );
+        SVNRepositoryFactory.createLocalRepository( file, true, false );
+        FileUtils.fileWrite( tempRepositoryPath + "/conf/svnserve.conf", "[general]\nanon-access = write\n" );
+        tempRepositoryUrl = SVNURL.create( "svn", null, "localhost", 3691, "maven-svn-wagon-test-repository", false );
+        File svnserveRoot = new File( getBasedir(), "target/test/svn" );
+        ProcessBuilder builder = new ProcessBuilder( "svnserve", "-d", "--listen-port", "3691", "-r", svnserveRoot.getAbsolutePath() );
         svnserveProcess = builder.start();
     }
 
     @Override
     protected void tearDown() throws Exception {
         svnserveProcess.destroy();
-        FileUtils.deleteDirectory(tempRepositoryPath);
+        FileUtils.deleteDirectory( tempRepositoryPath );
         super.tearDown();
     }
 

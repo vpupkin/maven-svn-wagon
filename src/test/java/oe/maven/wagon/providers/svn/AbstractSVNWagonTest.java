@@ -48,25 +48,25 @@ public abstract class AbstractSVNWagonTest extends WagonTestCase {
     }
 
     @Override
-    protected long getExpectedLastModifiedOnGet(Repository wagonRepository, Resource wagonResource) {
+    protected long getExpectedLastModifiedOnGet( Repository wagonRepository, Resource wagonResource ) {
         String wagonRepositoryUrl = wagonRepository.getUrl();
-        if (!wagonRepositoryUrl.startsWith("svn:")) {
-            throw new AssertionError("unexpected wagon protocol: " + wagonRepositoryUrl);
+        if ( !wagonRepositoryUrl.startsWith( "svn:" ) ) {
+            throw new AssertionError( "unexpected wagon protocol: " + wagonRepositoryUrl );
         }
         try {
-            SVNURL wagonRepositoryRoot = SVNURL.parseURIDecoded(wagonRepositoryUrl.substring("svn:".length()));
-            SVNRepository svnRepository = SVNRepositoryFactory.create(wagonRepositoryRoot);
-            svnRepository.setAuthenticationManager(SVNWCUtil.createDefaultAuthenticationManager());
-            SVNDirEntry entry = svnRepository.info(wagonResource.getName(), -1);
+            SVNURL wagonRepositoryRoot = SVNURL.parseURIDecoded( wagonRepositoryUrl.substring( "svn:".length() ) );
+            SVNRepository svnRepository = SVNRepositoryFactory.create( wagonRepositoryRoot );
+            svnRepository.setAuthenticationManager( SVNWCUtil.createDefaultAuthenticationManager() );
+            SVNDirEntry entry = svnRepository.info( wagonResource.getName(), -1 );
             svnRepository.closeSession();
             return entry.getDate().getTime();
-        } catch (SVNAuthenticationException e) {
-            AssertionError ae = new AssertionError("svn authentication failed");
-            ae.initCause(e);
+        } catch ( SVNAuthenticationException e ) {
+            AssertionError ae = new AssertionError( "svn authentication failed" );
+            ae.initCause( e );
             throw ae;
-        } catch (SVNException e) {
-            AssertionError ae = new AssertionError("svn connection failed");
-            ae.initCause(e);
+        } catch ( SVNException e ) {
+            AssertionError ae = new AssertionError( "svn connection failed" );
+            ae.initCause( e );
             throw ae;
         }
     }
