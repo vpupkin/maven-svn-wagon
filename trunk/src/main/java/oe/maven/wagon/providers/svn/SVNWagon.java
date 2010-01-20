@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2009, Oleg Estekhin
+ * Copyright (c) 2009-2010, Oleg Estekhin
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -74,9 +74,9 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 public class SVNWagon extends AbstractWagon {
 
     static {
-        DAVRepositoryFactory.setup();   // http, https
-        SVNRepositoryFactoryImpl.setup();   // svn, svn+xxx
-        FSRepositoryFactory.setup();    // file
+        DAVRepositoryFactory.setup(); // http, https
+        SVNRepositoryFactoryImpl.setup(); // svn, svn+xxx
+        FSRepositoryFactory.setup(); // file
     }
 
 
