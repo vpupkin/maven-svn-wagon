@@ -416,9 +416,12 @@ public class SVNWagon extends AbstractWagon {
             int lastDot = repositoryResourcePath.lastIndexOf( '.' );
             if ( lastDot >= 0 ) {
                 String extension = repositoryResourcePath.substring( lastDot + 1 );
-                String mimeType = ( String ) writeOptions.getFileExtensionsToMimeTypes().get( extension );
-                if ( mimeType != null ) {
-                    autoProperties.put( SVNProperty.MIME_TYPE, mimeType );
+                Map map = writeOptions.getFileExtensionsToMimeTypes();
+                if ( map != null ) {
+                    String mimeType = ( String ) map.get( extension );
+                    if ( mimeType != null ) {
+                        autoProperties.put( SVNProperty.MIME_TYPE, mimeType );
+                    }
                 }
             }
         }
