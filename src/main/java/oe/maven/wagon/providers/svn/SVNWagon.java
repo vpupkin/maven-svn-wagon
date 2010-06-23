@@ -67,7 +67,7 @@ import org.tmatesoft.svn.core.wc.ISVNOptions;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 /**
- * This wagon implementation uses SVNKit library to access resources hosted inside Subversion repository.
+ * This wagon implementation uses SVNKit library to access resources hosted inside a Subversion repository.
  *
  * @see <a href="http://svnkit.com/">http://svnkit.com/</a>
  */
