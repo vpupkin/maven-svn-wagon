@@ -1,10 +1,9 @@
  ---
  Introduction
  ---
- ---
  Oleg Estekhin
  ---
- 2010-06-23
+ 2010-08-18
  ---
 
 ${project.name}
@@ -16,9 +15,9 @@ ${project.name}
 
 * Usage
 
-  The wagon should be added to your POM as an extension.
+  The wagon should be added to your POM as an extension:
 
----
++---
 <project>
     ...
     <build>
@@ -32,7 +31,7 @@ ${project.name}
     </build>
     ...
 </project>
----
++---
 
   It will allow to use the following kinds of URLs in the <<<distributionManagement>>> POM section:
 
@@ -46,13 +45,28 @@ ${project.name}
 
   []
 
+  For example:
+
++---
+<project>
+    ...
+    <distributionManagement>
+        <repository>
+            <id>your server id</id>
+            <url>svn:https://your.server.org/path/to/repository</url>
+        </repository>
+    </distributionManagement>
+    ...
+</project>
++---
+
   The <<<"svn:">>> prefix activates the wagon and the remaining part of the URL contains the proper Subversion
   repository URL.
 
 * Features
 
-  The wagon uses the default Subversion runtime configuration area for authentication and for evaluation of
-  file properties that will be automatically set on newly added files.
+  The wagon uses the default Subversion runtime configuration area for evaluation of file properties (for example,
+  <<<svn:mime-type>>>) that will be automatically set on newly added files.
 
   Files ending with <<<".asc.md5">>> and <<<".asc.sha1">>> will be silently discarded on upload.
   Such files appear when the {{{http://maven.apache.org/plugins/maven-gpg-plugin}maven-gpg-plugin}} is used to sign
