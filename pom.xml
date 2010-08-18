@@ -4,7 +4,7 @@
 
     <groupId>com.google.code.maven-svn-wagon</groupId>
     <artifactId>maven-svn-wagon</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>Maven SVN Wagon</name>
@@ -34,9 +34,9 @@
     </developers>
 
     <scm>
-        <connection>scm:svn:http://maven-svn-wagon.googlecode.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://maven-svn-wagon.googlecode.com/svn/trunk</developerConnection>
-        <url>http://code.google.com/p/maven-svn-wagon/source/browse</url>
+        <connection>scm:svn:http://maven-svn-wagon.googlecode.com/svn/tags/maven-svn-wagon-1.2</connection>
+        <developerConnection>scm:svn:https://maven-svn-wagon.googlecode.com/svn/tags/maven-svn-wagon-1.2</developerConnection>
+        <url>http://code.google.com/p/maven-svn-wagon/source/browse/tags/maven-svn-wagon-1.2</url>
     </scm>
 
     <issueManagement>
