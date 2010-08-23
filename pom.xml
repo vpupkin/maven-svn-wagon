@@ -33,6 +33,16 @@
         </developer>
     </developers>
 
+    <mailingLists>
+        <mailingList>
+            <name>Mailing List</name>
+            <subscribe>maven-svn-wagon+subscribe@googlegroups.com</subscribe>
+            <unsubscribe>maven-svn-wagon+unsubscribe@googlegroups.com</unsubscribe>
+            <post>maven-svn-wagon@googlegroups.com</post>
+            <archive>http://groups.google.com/group/maven-svn-wagon</archive>
+        </mailingList>
+    </mailingLists>
+
     <scm>
         <connection>scm:svn:http://maven-svn-wagon.googlecode.com/svn/trunk</connection>
         <developerConnection>scm:svn:https://maven-svn-wagon.googlecode.com/svn/trunk</developerConnection>
