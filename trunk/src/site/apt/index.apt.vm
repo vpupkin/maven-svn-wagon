@@ -8,7 +8,7 @@
 
 Maven SVN Wagon
 
-    This wagon provides access to the Maven artifact repository hosted inside a Subversion repository.
+    This maven wagon provides access to the Maven artifact repository hosted inside a Subversion repository.
 
     The {{{http://svnkit.com}SVNKit}} library is used for all Subversion-related operations.
 
