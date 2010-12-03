@@ -45,6 +45,10 @@
         </mailingList>
     </mailingLists>
 
+    <prerequisites>
+        <maven>2.2.1</maven>
+    </prerequisites>
+
     <scm>
         <connection>scm:svn:http://maven-svn-wagon.googlecode.com/svn/trunk</connection>
         <developerConnection>scm:svn:https://maven-svn-wagon.googlecode.com/svn/trunk</developerConnection>
