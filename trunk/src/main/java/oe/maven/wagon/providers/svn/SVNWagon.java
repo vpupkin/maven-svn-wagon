@@ -185,6 +185,8 @@ public class SVNWagon extends AbstractWagon {
             } else {
                 throw new ResourceDoesNotExistException( repositoryResourceName + " is not a file" );
             }
+        } catch ( FileNotFoundException e ) {
+            throw new TransferFailedException( e.getMessage(), e );
         } catch ( SVNAuthenticationException e ) {
             throw new AuthorizationException( e.getMessage(), e );
         } catch ( SVNException e ) {
@@ -212,6 +214,8 @@ public class SVNWagon extends AbstractWagon {
             } else {
                 throw new ResourceDoesNotExistException( repositoryResourceName + " is not a file" );
             }
+        } catch ( FileNotFoundException e ) {
+            throw new TransferFailedException( e.getMessage(), e );
         } catch ( SVNAuthenticationException e ) {
             throw new AuthorizationException( e.getMessage(), e );
         } catch ( SVNException e ) {
@@ -232,6 +236,9 @@ public class SVNWagon extends AbstractWagon {
             openDirectoriesInternal( editor, pathComponents, 0, pathComponents.length - 1 );
             putFileInternal( localFile, repositoryResourcePath, new Resource( repositoryResourceName ) );
             closeDirectoriesInternal( editor, pathComponents.length - 1 );
+        } catch ( FileNotFoundException e ) {
+            writeSuccessful = false;
+            throw new TransferFailedException( e.getMessage(), e );
         } catch ( SVNAuthenticationException e ) {
             writeSuccessful = false;
             throw new AuthorizationException( e.getMessage(), e );
@@ -259,6 +266,9 @@ public class SVNWagon extends AbstractWagon {
             openDirectoriesInternal( editor, pathComponents, 0, pathComponents.length - 1 );
             putDirectoryInternal( localDirectory, repositoryDirectoryPath, new Resource( repositoryDirectoryName ) );
             closeDirectoriesInternal( editor, pathComponents.length - 1 );
+        } catch ( FileNotFoundException e ) {
+            writeSuccessful = false;
+            throw new TransferFailedException( e.getMessage(), e );
         } catch ( SVNAuthenticationException e ) {
             writeSuccessful = false;
             throw new AuthorizationException( e.getMessage(), e );
@@ -416,9 +426,10 @@ public class SVNWagon extends AbstractWagon {
             int lastDot = repositoryResourcePath.lastIndexOf( '.' );
             if ( lastDot >= 0 ) {
                 String extension = repositoryResourcePath.substring( lastDot + 1 );
-                Map map = writeOptions.getFileExtensionsToMimeTypes();
+                @SuppressWarnings( "unchecked" )
+                Map<String, String> map = writeOptions.getFileExtensionsToMimeTypes();
                 if ( map != null ) {
-                    String mimeType = ( String ) map.get( extension );
+                    String mimeType = map.get( extension );
                     if ( mimeType != null ) {
                         autoProperties.put( SVNProperty.MIME_TYPE, mimeType );
                     }
@@ -467,7 +478,7 @@ public class SVNWagon extends AbstractWagon {
         editor.closeDir();
     }
 
-    private void getInternal( String repositoryResourcePath, File localFile, Resource wagonResource ) throws TransferFailedException, SVNException {
+    private void getInternal( String repositoryResourcePath, File localFile, Resource wagonResource ) throws TransferFailedException, SVNException, FileNotFoundException {
         if ( addedEntries != null && addedEntries.contains( repositoryResourcePath ) ) {
             throw new AssertionError( "unexpected wagon state" );
         }
@@ -479,29 +490,23 @@ public class SVNWagon extends AbstractWagon {
         wagonResource.setContentLength( entry.getSize() );
         wagonResource.setLastModified( entry.getDate().getTime() );
         fireGetStarted( wagonResource, localFile );
-        FileOutputStream outputStream = null;
+        FileOutputStream outputStream = new FileOutputStream( localFile );
         try {
-            outputStream = new FileOutputStream( localFile );
             getReadRepository().getFile( repositoryResourcePath, -1, null, outputStream );
-        } catch ( FileNotFoundException e ) {
-            fireTransferError( wagonResource, e, TransferEvent.REQUEST_GET );
-            throw new TransferFailedException( e.toString(), e );
         } catch ( SVNException e ) {
             fireTransferError( wagonResource, e, TransferEvent.REQUEST_GET );
             throw e;
         } finally {
-            if ( outputStream != null ) {
-                try {
-                    outputStream.close();
-                } catch ( IOException ignored ) {
-                }
+            try {
+                outputStream.close();
+            } catch ( IOException ignored ) {
             }
         }
         postProcessListeners( wagonResource, localFile, TransferEvent.REQUEST_GET );
         fireGetCompleted( wagonResource, localFile );
     }
 
-    private void putFileInternal( File localFile, String repositoryResourcePath, Resource wagonResource ) throws TransferFailedException, SVNException {
+    private void putFileInternal( File localFile, String repositoryResourcePath, Resource wagonResource ) throws TransferFailedException, SVNException, FileNotFoundException {
         if ( repositoryResourcePath.startsWith( "/" ) ) {
             throw new AssertionError( "unexpected repository path: " + repositoryResourcePath );
         }
@@ -520,9 +525,8 @@ public class SVNWagon extends AbstractWagon {
         wagonResource.setLastModified( localFile.lastModified() );
         firePutStarted( wagonResource, localFile );
         SVNDeltaGenerator deltaGenerator = new SVNDeltaGenerator();
-        FileInputStream inputStream = null;
+        FileInputStream inputStream = new FileInputStream( localFile );
         try {
-            inputStream = new FileInputStream( localFile );
             if ( repositoryResourceExists || addedEntries.contains( repositoryResourcePath ) ) {
                 writeAttempted = true;
                 editor.openFile( repositoryResourcePath, -1 );
@@ -538,25 +542,20 @@ public class SVNWagon extends AbstractWagon {
             editor.applyTextDelta( repositoryResourcePath, null );
             String checksum = deltaGenerator.sendDelta( repositoryResourcePath, inputStream, editor, true );
             editor.closeFile( repositoryResourcePath, checksum );
-        } catch ( FileNotFoundException e ) {
-            fireTransferError( wagonResource, e, TransferEvent.REQUEST_PUT );
-            throw new TransferFailedException( e.toString(), e );
         } catch ( SVNException e ) {
             fireTransferError( wagonResource, e, TransferEvent.REQUEST_PUT );
             throw e;
         } finally {
-            if ( inputStream != null ) {
-                try {
-                    inputStream.close();
-                } catch ( IOException ignored ) {
-                }
+            try {
+                inputStream.close();
+            } catch ( IOException ignored ) {
             }
         }
         postProcessListeners( wagonResource, localFile, TransferEvent.REQUEST_PUT );
         firePutCompleted( wagonResource, localFile );
     }
 
-    private void putDirectoryInternal( File localDirectory, String repositoryDirectoryPath, Resource wagonResource ) throws TransferFailedException, SVNException {
+    private void putDirectoryInternal( File localDirectory, String repositoryDirectoryPath, Resource wagonResource ) throws TransferFailedException, SVNException, FileNotFoundException {
         ISVNEditor editor = getWriteEditor( repositoryDirectoryPath );
         openDirectoryInternal( editor, repositoryDirectoryPath );
         File[] localDirectoryContents = localDirectory.listFiles();
