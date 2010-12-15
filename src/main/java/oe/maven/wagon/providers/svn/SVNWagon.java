@@ -409,7 +409,7 @@ public class SVNWagon extends AbstractWagon {
         if ( repositoryResourceName.startsWith( "/" ) || repositoryResourceName.startsWith( "\\" ) ) {
             repositoryResourceName = repositoryResourceName.substring( 1 );
         }
-        return wagonRepositoryPath.isEmpty() ? repositoryResourceName : wagonRepositoryPath + '/' + repositoryResourceName;
+        return wagonRepositoryPath.length() == 0 ? repositoryResourceName : wagonRepositoryPath + '/' + repositoryResourceName;
     }
 
     /**
