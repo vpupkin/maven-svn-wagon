@@ -56,6 +56,7 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNPropertyValue;
 import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
@@ -119,7 +120,7 @@ public class SVNWagon extends AbstractWagon {
         try {
             SVNURL wagonRepositoryRoot = SVNURL.parseURIDecoded( wagonRepositoryUrl.substring( "svn:".length() ) );
             SVNRepository svnRepository = SVNRepositoryFactory.create( wagonRepositoryRoot );
-            svnRepository.setAuthenticationManager( SVNWCUtil.createDefaultAuthenticationManager() );
+            svnRepository.setAuthenticationManager( createAuthenticationManager() );
             svnRepositoryRoot = svnRepository.getRepositoryRoot( true );
             svnRepository.closeSession();
             wagonRepositoryPath = wagonRepositoryRoot.getPath().substring( svnRepositoryRoot.getPath().length() );
@@ -315,6 +316,20 @@ public class SVNWagon extends AbstractWagon {
 
 
     /**
+     * Returns the authentication manager that uses both the Subversion servers configuration and authentication storage
+     * and Maven servers configuration.
+     *
+     * @return the authentication manager
+     */
+    private ISVNAuthenticationManager createAuthenticationManager() {
+        ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager();
+        if ( authenticationInfo != null ) {
+            authenticationManager.setAuthenticationProvider( new MavenAuthenticationProvider( authenticationInfo ) );
+        }
+        return authenticationManager;
+    }
+
+    /**
      * Returns the repository for read operations.
      * <p/>
      * This method lazily creates the read repository if needed.
@@ -326,7 +341,7 @@ public class SVNWagon extends AbstractWagon {
     private SVNRepository getReadRepository() throws SVNException {
         if ( readRepository == null ) {
             readRepository = SVNRepositoryFactory.create( svnRepositoryRoot );
-            readRepository.setAuthenticationManager( SVNWCUtil.createDefaultAuthenticationManager() );
+            readRepository.setAuthenticationManager( createAuthenticationManager() );
         }
         return readRepository;
     }
@@ -343,7 +358,7 @@ public class SVNWagon extends AbstractWagon {
     private SVNRepository getWriteRepository() throws SVNException {
         if ( writeRepository == null ) {
             writeRepository = SVNRepositoryFactory.create( svnRepositoryRoot );
-            writeRepository.setAuthenticationManager( SVNWCUtil.createDefaultAuthenticationManager() );
+            writeRepository.setAuthenticationManager( createAuthenticationManager() );
         }
         return writeRepository;
     }
