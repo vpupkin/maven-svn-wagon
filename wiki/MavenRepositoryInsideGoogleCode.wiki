@@ -27,3 +27,18 @@ Just replace the `yourproject` with your project name, and, if you want, configu
 You may also need to configure user credentials (user name and password) inside the Maven's setiings.xml file for a server corresponding to the `id` specified in the `distributionManagement` section.
 
 Now the [http://maven.apache.org/plugins/maven-deploy-plugin/ deploy] and [http://maven.apache.org/plugins/maven-release-plugin/ release] plugins will automatically deploy your artifacts inside your Google Code subversion repository.
+
+People who use your artifacts will need to configure an additional repository:
+
+{{{
+<repositories>
+   <repository>
+      <id>yourproject.googlecode.com</id>
+      <url>http://yourproject.googlecode.com/svn/m2/releases</url>
+   </repository>
+</repositories>
+}}}
+
+Note that they do not need the Maven SVN Wagon to access this repository.
+
+Snapshot or plugin repositories are configred in the same way, please refer to the Maven [http://maven.apache.org/pom.html#Repositories POM reference].
