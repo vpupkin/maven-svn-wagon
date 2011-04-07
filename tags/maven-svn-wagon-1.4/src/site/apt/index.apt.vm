@@ -1,0 +1,119 @@
+    ---
+    Introduction
+    ---
+    Oleg Estekhin
+    ---
+    2011-04-07
+    ---
+
+Maven SVN Wagon
+
+    This maven wagon provides access to the Maven artifact repository hosted inside a Subversion repository.
+
+    The {{{http://svnkit.com}SVNKit}} library is used for all Subversion-related operations.
+
+* Usage
+
+    The wagon will allow to use the following kinds of URLs in the <<<distributionManagement>>> and <<<repositories>>>
+    POM sections:
+
+    * <<<svn:http://host/path/to/repository>>>
+
+    * <<<svn:https://host/path/to/repository>>>
+
+    * <<<svn:svn://host/path/to/repository>>>
+
+    * <<<svn:file://path/to/repository>>>
+
+    []
+
+    Please note that if your Subversion repository can be accessed through the <<<http>>> or <<<https>>> protocol than
+    you need this wagon only if you deploy artifacts into the repository. If you just depend on artifacts hosted inside
+    such a repository than you can simply specify direct <<<http://>>> or <<<https://>>> repository URL in the
+    <<<repositories>>> POM section.
+
+    The <<<"svn:">>> prefix activates the wagon and the remaining part of the URL contains the proper Subversion
+    repository URL.
+
+    For example:
+
++---
+<project>
+    ...
+    <distributionManagement>
+        <repository>
+            <id>your.server.id</id>
+            <url>svn:https://your.server/path/to/repository</url>
+        </repository>
+    </distributionManagement>
+    ...
+</project>
++---
+
+    If repository requires authentication then the required user credentials should be configured in the Maven's
+    {{{http://maven.apache.org/settings.html#Servers}settings.xml}} file as usual.
+
+    The wagon should be added to your POM either as a dependency for the deploy plugin (if it is used in the deploy phase only)
+    or as an extension (if it is used somewhere besides the deploy phase).
+
+    As the dependency for the deploy plugin:
+
++---
+<project>
+    ...
+    <build>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <version><!-- please use the latest version of the deploy plugin --></version>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>${project.artifactId}</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+    </build>
+    ...
+</project>
++---
+
+    As the extension:
+
++---
+<project>
+    ...
+    <build>
+        <extensions>
+            <extension>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>${project.artifactId}</artifactId>
+                <version>${project.version}</version>
+            </extension>
+        </extensions>
+    </build>
+    ...
+</project>
++---
+
+* Features
+
+    The wagon uses the default Subversion runtime configuration area for evaluation of file properties (for example,
+    <<<svn:mime-type>>>) that will be automatically set on newly added files.
+
+    Files ending with <<<".asc.md5">>> and <<<".asc.sha1">>> will be silently discarded on upload.
+    Such files appear when the {{{http://maven.apache.org/plugins/maven-gpg-plugin}maven-gpg-plugin}} is used to sign
+    the project artifacts and then the {{{http://maven.apache.org/plugins/maven-deploy-plugin}maven-deploy-plugin}}
+    (either directly or through the {{{http://maven.apache.org/plugins/maven-release-plugin}maven-release-plugin}})
+    is used to deploy them to the repository.
+
+* Similar wagons
+
+    The following wagons can also be used to work with the Subversion-based Maven repositories:
+
+    * {{{http://maven.apache.org/wagon/wagon-providers/wagon-scm/index.html}<<<org.apache.maven.wagon:wagon-scm>>>}}
+
+    * {{{https://wagon-svn.dev.java.net}<<<org.jvnet.wagon-svn:wagon-svn>>>}}
+
+    []
