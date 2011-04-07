@@ -161,8 +161,10 @@ public class SVNWagon extends AbstractWagon {
     public boolean resourceExists( String repositoryResourceName ) throws TransferFailedException, AuthorizationException {
         String repositoryResourcePath = getResourcePath( repositoryResourceName );
         try {
+            // hack for http://code.google.com/p/maven-svn-wagon/issues/detail?id=7
+            SVNNodeKind expectedResourceKind = repositoryResourceName.endsWith( "/" ) ? SVNNodeKind.DIR : SVNNodeKind.FILE;
             SVNNodeKind repositoryResourceKind = getReadRepository().checkPath( repositoryResourcePath, -1 );
-            return !SVNNodeKind.NONE.equals( repositoryResourceKind );
+            return expectedResourceKind.equals( repositoryResourceKind );
         } catch ( SVNAuthenticationException e ) {
             throw new AuthorizationException( e.getMessage(), e );
         } catch ( SVNException e ) {

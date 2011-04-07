@@ -29,6 +29,7 @@
 
 package oe.maven.wagon.providers.svn;
 
+import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.WagonTestCase;
 import org.apache.maven.wagon.repository.Repository;
 import org.apache.maven.wagon.resource.Resource;
@@ -69,6 +70,24 @@ public abstract class AbstractSVNWagonTest extends WagonTestCase {
             ae.initCause( e );
             throw ae;
         }
+    }
+
+
+    public void testResourceDoesNotExistForFileWithTrailingSlash() throws Exception {
+        setupRepositories();
+        setupWagonTestingFixtures();
+
+        Wagon wagon = getWagon();
+        putFile();
+        wagon.connect( testRepository, getAuthInfo() );
+
+        String resourceName = sourceFile.getName();
+        assertTrue( resourceName + " does not exist", wagon.resourceExists( resourceName ) );
+        resourceName += '/';
+        assertFalse( resourceName + " exists", wagon.resourceExists( resourceName ) );
+
+        wagon.disconnect();
+        tearDownWagonTestingFixtures();
     }
 
 }
