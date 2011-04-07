@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2009-2010, Oleg Estekhin
+ * Copyright (c) 2009-2011, Oleg Estekhin
  * All rights reserved.
  */
 
