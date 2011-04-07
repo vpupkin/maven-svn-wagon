@@ -22,7 +22,7 @@ Configure the `distributionManagement` section in your pom like this:
 </distributionManagement>
 }}}
 
-Just replace the `yourproject` with your project name, and, if you want, configure the path in the release, snapshot and site urls.
+Just replace the `yourproject` with your project name, and, if you want, configure the path in the release and snapshot urls.
 
 You may also need to configure user credentials (user name and password) inside the Maven's setiings.xml file for a server corresponding to the `id` specified in the `distributionManagement` section.
 
