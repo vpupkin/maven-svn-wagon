@@ -3,7 +3,7 @@
     ---
     Oleg Estekhin
     ---
-    2010-11-23
+    2011-04-07
     ---
 
 Maven SVN Wagon
@@ -27,6 +27,11 @@ Maven SVN Wagon
 
     []
 
+    Please note that if your Subversion repository can be accessed through the <<<http>>> or <<<https>>> protocol than
+    you need this wagon only if you deploy artifacts into the repository. If you just depend on artifacts hosted inside
+    such a repository than you can simply specify direct <<<http://>>> or <<<https://>>> repository URL in the
+    <<<repositories>>> POM section.
+
     The <<<"svn:">>> prefix activates the wagon and the remaining part of the URL contains the proper Subversion
     repository URL.
 
@@ -45,9 +50,8 @@ Maven SVN Wagon
 </project>
 +---
 
-    Please note that if your Subversion repository can be accessed through the http or https protocol than you need
-    this wagon only to deploy artifacts into the repository. If you depend on artifacts hosted inside such a repository
-    than you can simply specify direct http or https repository URL in the <<<repositories>>> POM section.
+    If repository requires authentication then the required user credentials should be configured in the Maven's
+    {{{http://maven.apache.org/settings.html#Servers}settings.xml}} file as usual.
 
     The wagon should be added to your POM either as a dependency for the deploy plugin (if it is used in the deploy phase only)
     or as an extension (if it is used somewhere besides the deploy phase).
