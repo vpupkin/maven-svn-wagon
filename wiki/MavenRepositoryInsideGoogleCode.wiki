@@ -5,9 +5,26 @@
 
 The Google Code SVN can be used to host the Maven artifacts repository and the Maven SVN Wagon can be used to automatically deploy artifacts created by the Maven into such a repository.
 
-Configure the maven-svn-wagon as described in the [http://maven-svn-wagon.googlecode.com/svn/site/index.html documentation].
+Configure the maven-svn-wagon as a dependency of the deploy plugin:
+{{{
+<build>
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version><!-- please use the latest version of the deploy plugin --></version>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.code.maven-svn-wagon</groupId>
+                <artifactId>maven-svn-wagon</artifactId>
+                <version><!-- please use the latest version of the wagon --></version>
+            </dependency>
+        </dependencies>
+    </plugin>
+</build>
+}}}
+Additional information on how to configure the wagon can be found in the [http://maven-svn-wagon.googlecode.com/svn/site/index.html documentation].
 
-Configure the `distributionManagement` section in your pom like this:
+Configure the `distributionManagement` section in your pom file:
 
 {{{
 <distributionManagement>
