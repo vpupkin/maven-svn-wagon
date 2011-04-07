@@ -1,0 +1,29 @@
+#summary Hosting Maven artifact repository inside Google Code Subversion repository.
+#labels Featured
+
+= Hosting Maven artifact repository inside Google Code SVN =
+
+The Google Code SVN can be used to host the Maven artifacts repository and the Maven SVN Wagon can be used to automatically deploy artifacts created by the Maven into such a repository.
+
+Configure the maven-svn-wagon as described in the [http://maven-svn-wagon.googlecode.com/svn/site/index.html documentation].
+
+Configure the `distributionManagement` section in your pom like this:
+
+{{{
+<distributionManagement>
+    <repository>
+        <id>yourproject.googlecode.com</id>
+        <url>svn:https://yourproject.googlecode.com/svn/m2/releases</url>
+    </repository>
+    <snapshotRepository>
+        <id>yourproject.googlecode.com</id>
+        <url>svn:https://yourproject.googlecode.com/svn/m2/snapshots</url>
+    </snapshotRepository>
+</distributionManagement>
+}}}
+
+Just replace the `yourproject` with your project name, and, if you want, configure the path in the release, snapshot and site urls.
+
+You may also need to configure user credentials (user name and password) inside the Maven's setiings.xml file for a server corresponding to the `id` specified in the `distributionManagement` section.
+
+Now the [http://maven.apache.org/plugins/maven-deploy-plugin/ deploy] and [http://maven.apache.org/plugins/maven-release-plugin/ release] plugins will automatically deploy your artifacts inside your Google Code subversion repository.
