@@ -322,11 +322,17 @@ public class SVNWagon extends AbstractWagon {
      * @return the authentication manager
      */
     private ISVNAuthenticationManager createAuthenticationManager() {
-        ISVNAuthenticationManager authenticationManager = SVNWCUtil.createDefaultAuthenticationManager();
-        if ( authenticationInfo != null ) {
-            authenticationManager.setAuthenticationProvider( new MavenAuthenticationProvider( authenticationInfo ) );
+        if ( authenticationInfo == null ) {
+            return SVNWCUtil.createDefaultAuthenticationManager();
+        } else {
+            return SVNWCUtil.createDefaultAuthenticationManager(
+                    null,
+                    authenticationInfo.getUserName(),
+                    authenticationInfo.getPassword(),
+                    authenticationInfo.getPrivateKey() == null ? null : new File( authenticationInfo.getPrivateKey() ),
+                    authenticationInfo.getPassphrase(),
+                    false );
         }
-        return authenticationManager;
     }
 
     /**
